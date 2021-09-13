@@ -64,7 +64,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	}
 
 	// Debug
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %0.2f Flock: %d", ebiten.CurrentFPS(), len(g.flock)))
+	ebitenutil.DebugPrint(screen, fmt.Sprintf(" FPS: %0.2f\n Flock size: %d", ebiten.CurrentFPS(), len(g.flock)))
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
