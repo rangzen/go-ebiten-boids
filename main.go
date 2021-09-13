@@ -19,8 +19,8 @@ const (
 	startingFlockSize = 500 // how many boid created at start
 	tickPeriod        = 1   // how many ticks between update
 	minSpeed          = 2.  // max speed
-	maxSpeed          = 5.  // max speed
-	vectorRatio       = 10  // ratio for vector drawing
+	maxSpeed          = 4.  // max speed
+	vectorRatio       = 7   // ratio for vector drawing
 )
 
 func init() {
