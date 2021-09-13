@@ -1,10 +1,11 @@
 package main
 
 type Game struct {
-	flock    Flock
-	ruler    Ruler
-	timer    int
-	moveTime int
+	flock         Flock
+	ruler         Ruler
+	timer         int
+	moveTime      int
+	width, height int
 }
 
 type Flock []*Boid
@@ -42,7 +43,7 @@ func (g *Game) updateFlock() {
 			b.velocity.add(vector)
 		}
 		b.SpeedLimit(minSpeed, maxSpeed)
-		b.Update()
+		b.Update(g.width, g.height)
 	}
 
 	g.flock = nextFlock

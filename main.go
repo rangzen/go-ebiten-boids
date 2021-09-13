@@ -15,16 +15,12 @@ import (
 const exitCodeNormal = 0
 
 const (
+	originalSize      = 480 // original size of the window
 	startingFlockSize = 500 // how many boid created at start
 	tickPeriod        = 1   // how many ticks between update
 	minSpeed          = 2.  // max speed
 	maxSpeed          = 5.  // max speed
 	vectorRatio       = 10  // ratio for vector drawing
-)
-
-var (
-	screenWidth  = 1000
-	screenHeight = 1000
 )
 
 func init() {
@@ -72,12 +68,15 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 1000, 1000
+	g.width = outsideWidth
+	g.height = outsideHeight
+	return outsideWidth, outsideHeight
 }
 
 func main() {
-	ebiten.SetWindowSize(screenWidth, screenHeight)
+	ebiten.SetWindowSize(originalSize, originalSize)
 	ebiten.SetWindowTitle("Boid Flock in Go/Ebiten")
+	ebiten.SetWindowResizable(true)
 	if err := ebiten.RunGame(NewGame()); err != nil {
 		log.Fatal(err)
 	}

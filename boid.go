@@ -15,8 +15,8 @@ type Boid struct {
 func NewBoid() *Boid {
 	b := Boid{
 		position: Vector{
-			X: rand.Float64() * float64(screenWidth),
-			Y: rand.Float64() * float64(screenHeight),
+			X: rand.Float64() * float64(originalSize),
+			Y: rand.Float64() * float64(originalSize),
 		},
 		velocity: Vector{
 			X: randomVelocity(),
@@ -41,9 +41,9 @@ func (b *Boid) IsNeighbor(b2 Boid, distance float64) bool {
 	return math.Abs(b.position.X-b2.position.X) < distance && math.Abs(b.position.Y-b2.position.Y) < distance
 }
 
-func (b *Boid) Update() {
-	b.position.X = overLimit(b.position.X+b.velocity.X, screenWidth)
-	b.position.Y = overLimit(b.position.Y+b.velocity.Y, screenHeight)
+func (b *Boid) Update(width, height int) {
+	b.position.X = overLimit(b.position.X+b.velocity.X, width)
+	b.position.Y = overLimit(b.position.Y+b.velocity.Y, height)
 }
 
 func (b *Boid) SpeedLimit(min, max float64) {
