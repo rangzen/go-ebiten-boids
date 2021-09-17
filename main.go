@@ -16,7 +16,7 @@ const exitCodeNormal = 0
 
 const (
 	originalSize      = 480 // original size of the window
-	startingFlockSize = 500 // how many boid created at start
+	startingFlockSize = 108 // how many boid created at start
 	tickPeriod        = 1   // how many ticks between update
 	minSpeed          = 2.  // max speed
 	maxSpeed          = 4.  // max speed
