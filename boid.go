@@ -1,6 +1,7 @@
 package main
 
 import (
+	gc "github.com/gerow/go-color"
 	"image/color"
 	"math"
 	"math/rand"
@@ -22,14 +23,25 @@ func NewBoid() *Boid {
 			X: randomVelocity(),
 			Y: randomVelocity(),
 		},
-		color: color.RGBA{
-			R: uint8(int8(rand.Float64() * 0xff)),
-			G: uint8(int8(rand.Float64() * 0xff)),
-			B: uint8(int8(rand.Float64() * 0xff)),
-			A: 0xff,
-		},
+		color: randomBrightColor(),
 	}
 	return &b
+}
+
+// Get a Bright Random Colour Python https://stackoverflow.com/a/43437435/337726
+func randomBrightColor() color.RGBA {
+	hsl := gc.HSL{
+		H: rand.Float64(),
+		S: .9,
+		L: .6 + rand.Float64()/5,
+	}
+	rgb := hsl.ToRGB()
+	return color.RGBA{
+		R: uint8(rgb.R * 256),
+		G: uint8(rgb.G * 256),
+		B: uint8(rgb.B * 256),
+		A: 0xff,
+	}
 }
 
 func randomVelocity() float64 {
