@@ -50,7 +50,7 @@ func (g *Game) Update() error {
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	// Background
-	screen.Fill(color.RGBA{R: 0x64, G: 0xb4, B: 0xb4, A: 0xff})
+	screen.Fill(color.RGBA{})
 
 	// Flock
 	for _, b := range g.flock {
