@@ -1,4 +1,4 @@
-package main
+package boids
 
 import (
 	gc "github.com/gerow/go-color"
@@ -16,8 +16,8 @@ type Boid struct {
 func NewBoid() *Boid {
 	b := Boid{
 		position: Vector{
-			X: rand.Float64() * float64(originalSize),
-			Y: rand.Float64() * float64(originalSize),
+			X: rand.Float64() * float64(OriginalSize),
+			Y: rand.Float64() * float64(OriginalSize),
 		},
 		velocity: Vector{
 			X: randomVelocity(),

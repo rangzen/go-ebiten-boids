@@ -1,4 +1,4 @@
-package main
+package boids
 
 type Vector struct {
 	X, Y float64

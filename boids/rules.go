@@ -1,4 +1,4 @@
-package main
+package boids
 
 type Rule interface {
 	Apply(flock Flock, index int) Vector
