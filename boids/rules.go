@@ -4,23 +4,53 @@ type Rule interface {
 	Apply(flock Flock, index int) Vector
 }
 
-type Ruler []Rule
+type Ruler struct {
+	a   AlignmentRule
+	c   CohesionRule
+	s   SeparationRule
+	att AttractorRule
+}
+
+func (r *Ruler) Apply(flock Flock, index int) Vector {
+	v := Vector{}
+	for _, rule := range []Rule{r.a, r.c, r.s} {
+		vr := rule.Apply(flock, index)
+		v.add(vr)
+	}
+	if r.att.attractor.IsAlive() {
+		vr := r.att.Apply(flock, index)
+		v.add(vr)
+	}
+	return v
+}
+
+func (r *Ruler) AttractorOn(x int, y int) {
+	r.att.attractor.position.X = float64(x)
+	r.att.attractor.position.Y = float64(y)
+	r.att.attractor.ttl = attractorDefaultTtl
+}
 
 func NewDefaultRuler() Ruler {
-	rules := make([]Rule, 0)
-	ar := AlignmentRule{
-		neighborDistance: 50,
-		factor:           10,
+	return Ruler{
+		a: AlignmentRule{
+			neighborDistance: 50,
+			factor:           10,
+		},
+		c: CohesionRule{
+			factor: .01,
+		},
+		s: SeparationRule{
+			neighborDistance: 50,
+			factor:           .01,
+		},
+		att: AttractorRule{
+			attractor: Attractor{
+				position: Vector{},
+				ttl:      0,
+			},
+			factor: 1,
+		},
 	}
-	cr := CohesionRule{
-		factor: .01,
-	}
-	sr := SeparationRule{
-		neighborDistance: 50,
-		factor:           .01,
-	}
-	rules = append(rules, ar, cr, sr)
-	return rules
 }
 
 type AlignmentRule struct {
@@ -99,5 +129,24 @@ func (s SeparationRule) Apply(flock Flock, index int) Vector {
 	}
 	v.X *= s.factor / 100
 	v.Y *= s.factor / 100
+	return v
+}
+
+type AttractorRule struct {
+	attractor Attractor
+	factor    float64
+}
+
+func (s *AttractorRule) Apply(flock Flock, index int) Vector {
+	origP := flock[index].position
+	v := Vector{
+		X: s.attractor.position.X - origP.X,
+		Y: s.attractor.position.Y - origP.Y,
+	}
+	v.X *= s.factor / 100
+	v.Y *= s.factor / 100
+
+	s.attractor.Lived()
+
 	return v
 }

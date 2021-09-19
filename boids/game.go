@@ -14,12 +14,13 @@ import (
 const exitCodeNormal = 0
 
 const (
-	OriginalSize      = 480 // original size of the window
-	startingFlockSize = 108 // how many boid created at start
-	tickPeriod        = 1   // how many ticks between update
-	minSpeed          = 2.  // max speed
-	maxSpeed          = 4.  // max speed
-	vectorRatio       = 7   // ratio for vector drawing
+	OriginalSize        = 480 // original size of the window
+	startingFlockSize   = 108 // how many boid created at start
+	tickPeriod          = 1   // how many ticks between update
+	minSpeed            = 2.  // max speed
+	maxSpeed            = 4.  // max speed
+	vectorRatio         = 7   // ratio for vector drawing
+	attractorDefaultTtl = ebiten.DefaultTPS * 10
 )
 
 func init() {
@@ -36,6 +37,19 @@ type Game struct {
 
 type Flock []*Boid
 
+type Attractor struct {
+	position Vector
+	ttl      int
+}
+
+func (a *Attractor) IsAlive() bool {
+	return a.ttl > 0
+}
+
+func (a *Attractor) Lived() {
+	a.ttl--
+}
+
 // Update is part of ebiten.Game implementation
 func (g *Game) Update() error {
 	// Keyboard input
@@ -47,6 +61,18 @@ func (g *Game) Update() error {
 		g.resetFlockVelocity()
 	} else if inpututil.IsKeyJustPressed(ebiten.KeyQ) {
 		os.Exit(exitCodeNormal)
+	}
+
+	// Mouse input
+	if inpututil.MouseButtonPressDuration(ebiten.MouseButtonLeft) > 0 {
+		x, y := ebiten.CursorPosition()
+		g.addTemporaryAttractor(x, y)
+	}
+
+	// Touch input
+	if len(ebiten.TouchIDs()) > 0 && inpututil.TouchPressDuration(ebiten.TouchIDs()[0]) > 0 {
+		x, y := ebiten.TouchPosition(ebiten.TouchIDs()[0])
+		g.addTemporaryAttractor(x, y)
 	}
 
 	// Flock update
@@ -113,10 +139,8 @@ func (g *Game) updateFlock() {
 	copy(nextFlock, g.flock)
 
 	for i, b := range nextFlock {
-		for _, rule := range g.ruler {
-			vector := rule.Apply(g.flock, i)
-			b.velocity.add(vector)
-		}
+		vector := g.ruler.Apply(g.flock, i)
+		b.velocity.add(vector)
 		b.Update(g.width, g.height)
 	}
 
@@ -128,4 +152,8 @@ func (g *Game) resetFlockVelocity() {
 		b.velocity.X = randomVelocity()
 		b.velocity.Y = randomVelocity()
 	}
+}
+
+func (g *Game) addTemporaryAttractor(x int, y int) {
+	g.ruler.AttractorOn(x, y)
 }
