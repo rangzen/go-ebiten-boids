@@ -117,7 +117,6 @@ func (g *Game) updateFlock() {
 			vector := rule.Apply(g.flock, i)
 			b.velocity.add(vector)
 		}
-		b.SpeedLimit(minSpeed, maxSpeed)
 		b.Update(g.width, g.height)
 	}
 

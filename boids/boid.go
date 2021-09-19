@@ -53,12 +53,31 @@ func (b *Boid) IsNeighbor(b2 Boid, distance float64) bool {
 	return math.Abs(b.position.X-b2.position.X) < distance && math.Abs(b.position.Y-b2.position.Y) < distance
 }
 
-func (b *Boid) Update(width, height int) {
-	b.position.X = overLimit(b.position.X+b.velocity.X, width)
-	b.position.Y = overLimit(b.position.Y+b.velocity.Y, height)
+func (b *Boid) Update(width int, height int) {
+	b.checkSpeed(minSpeed, maxSpeed)
+	b.position.X += b.velocity.X
+	b.position.Y += b.velocity.Y
+	b.checkPosition(width, height)
 }
 
-func (b *Boid) SpeedLimit(min, max float64) {
+// checkPosition deals with window border
+func (b *Boid) checkPosition(width, height int) {
+	b.position.X = modulo(b.position.X, width)
+	b.position.Y = modulo(b.position.Y, height)
+}
+
+// modulo keep a value in a modulo range
+func modulo(v float64, m int) float64 {
+	if v > float64(m) {
+		return v - float64(m)
+	} else if v < 0 {
+		return v + float64(m)
+	}
+	return v
+}
+
+// checkSpeed keep speed in a range
+func (b *Boid) checkSpeed(min, max float64) {
 	d := math.Sqrt(math.Pow(b.velocity.X, 2) + math.Pow(b.velocity.Y, 2))
 	if d < min {
 		r := d / min
@@ -69,13 +88,4 @@ func (b *Boid) SpeedLimit(min, max float64) {
 		b.velocity.X /= r
 		b.velocity.Y /= r
 	}
-}
-
-func overLimit(position float64, limit int) float64 {
-	if position > float64(limit) {
-		return position - float64(limit)
-	} else if position < 0 {
-		return position + float64(limit)
-	}
-	return position
 }
