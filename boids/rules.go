@@ -33,22 +33,22 @@ func (r *Ruler) AttractorOn(x int, y int) {
 func NewDefaultRuler() Ruler {
 	return Ruler{
 		a: AlignmentRule{
-			neighborDistance: 50,
-			factor:           10,
+			neighborDistance: 20,
+			factor:           15,
 		},
 		c: CohesionRule{
 			factor: .01,
 		},
 		s: SeparationRule{
-			neighborDistance: 50,
-			factor:           .01,
+			neighborDistance: 10,
+			factor:           1,
 		},
 		att: AttractorRule{
 			attractor: Attractor{
 				position: Vector{},
 				ttl:      0,
 			},
-			factor: 1,
+			factor: .1,
 		},
 	}
 }
