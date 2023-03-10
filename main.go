@@ -1,9 +1,10 @@
 package main
 
 import (
+	"log"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/rangzen/go-ebiten-boids/boids"
-	"log"
 )
 
 func main() {

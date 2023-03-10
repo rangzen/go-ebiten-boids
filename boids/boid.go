@@ -1,10 +1,11 @@
 package boids
 
 import (
-	gc "github.com/gerow/go-color"
 	"image/color"
 	"math"
 	"math/rand"
+
+	gc "github.com/gerow/go-color"
 )
 
 type Boid struct {
